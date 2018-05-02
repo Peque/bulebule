@@ -107,6 +107,7 @@ void disable_walls_control(void)
 {
 	side_sensors_control(false);
 	front_sensors_control(false);
+	front_distance_control(false);
 }
 
 /**

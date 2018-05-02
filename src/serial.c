@@ -123,10 +123,14 @@ static void process_command(void)
 		set_ki_angular_side(parse_spaced_float(2));
 	else if (starts_with("set ki_angular_front "))
 		set_ki_angular_front(parse_spaced_float(2));
+	else if (starts_with("set ki_distance_front "))
+		set_ki_distance_front(parse_spaced_float(2));
 	else if (starts_with("set side_sensors_error_factor "))
 		set_side_sensors_error_factor(parse_spaced_float(2));
 	else if (starts_with("set front_sensors_error_factor "))
 		set_front_sensors_error_factor(parse_spaced_float(2));
+	else if (starts_with("set front_distance_error_factor "))
+		set_front_distance_error_factor(parse_spaced_float(2));
 	else
 		LOG_WARNING("Unknown command: `%s`!", buffer.data);
 

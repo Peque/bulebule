@@ -25,8 +25,10 @@ void log_configuration_variables(void)
 	float kd_angular = get_kd_angular();
 	float ki_angular_side = get_ki_angular_side();
 	float ki_angular_front = get_ki_angular_front();
+	float ki_distance_front = get_ki_distance_front();
 	float side_sensors_error_factor = get_side_sensors_error_factor();
 	float front_sensors_error_factor = get_front_sensors_error_factor();
+	float front_distance_error_factor = get_front_distance_error_factor();
 
 	LOG_INFO("{\"micrometers_per_count\":%f,"
 		 "\"wheels_separation\":%f,"
@@ -40,13 +42,15 @@ void log_configuration_variables(void)
 		 "\"kd_angular\":%f,"
 		 "\"ki_angular_side\":%f,"
 		 "\"ki_angular_front\":%f,"
+		 "\"ki_distance_front\":%f,"
 		 "\"side_sensors_error_factor\":%f,"
-		 "\"front_sensors_error_factor\":%f}",
+		 "\"front_sensors_error_factor\":%f,"
+		 "\"front_distance_error_factor\":%f}",
 		 micrometers_per_count, wheels_separation, max_linear_speed,
 		 linear_acceleration, linear_deceleration, angular_acceleration,
 		 kp_linear, kd_linear, kp_angular, kd_angular, ki_angular_side,
-		 ki_angular_front, side_sensors_error_factor,
-		 front_sensors_error_factor);
+		 ki_angular_front, ki_distance_front, side_sensors_error_factor,
+		 front_sensors_error_factor, front_distance_error_factor);
 }
 
 /**

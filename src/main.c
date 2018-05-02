@@ -80,6 +80,25 @@ int main(void)
 			}
 			reset_motion();
 		}
+		if (button_right_read_consecutive(500)) {
+			blink_burst();
+			sleep_ticks(5000);
+
+                        int x0 = get_encoder_average_micrometers();
+                        enable_motor_control();
+                        front_sensors_control(front_wall_detection());
+                        front_distance_control(front_wall_detection());
+                        while (get_encoder_average_micrometers() - x0 < 50000) {
+		                execute_commands();
+                                sleep_ticks(2);
+                        }
+                        front_distance_control(false);
+                        disable_walls_control();
+                        disable_motor_control();
+                        blink_burst();
+
+			//run_movement_sequence("OM");
+		}
 		execute_commands();
 	}
 
