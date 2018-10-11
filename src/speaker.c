@@ -79,3 +79,44 @@ void speaker_play(char note, uint8_t octave, int8_t accidental, float duration)
 	speaker_off();
 	setup_emitters();
 }
+
+void speaker_play_score(char *score)
+{
+	const char delimiter[2] = ",";
+	char *token;
+	char note;
+	uint8_t octave;
+	float duration;
+
+	token = strtok(score, delimiter);
+	while (token != NULL) {
+		sscanf(token, "%f%c%" PRIu8, &duration, &note, &octave);
+		duration *= 0.3;
+		speaker_play(note, octave, 0, duration);
+		token = strtok(NULL, delimiter);
+	}
+}
+
+void speaker_play_score2(char *score)
+{
+	char *head;
+
+	char note;
+	float duration;
+	int octave;
+
+	head = score;
+	while (*head != '\0') {
+		sscanf(head, "%f", &duration);
+		head = strpbrk(head, "ABCDEFGZ");
+		note = *head;
+		head++;
+		sscanf(head, "%d", &octave);
+		head = strpbrk(head, ",");
+		if (head == NULL)
+			break;
+		head++;
+		duration *= 0.3;
+		speaker_play(note, octave, 0, duration);
+	}
+}

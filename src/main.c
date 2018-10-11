@@ -157,14 +157,15 @@ static void training(void)
  */
 int main(void)
 {
+	char score[] = "1C4,1D4,1E4,1F4,1G4,1A4,1B4,1C5";
+
 	setup();
 	set_speed_mode(0, false);
 	systick_interrupt_enable();
-	competition();
+	//competition();
 	while (1) {
-		if (button_left_read_consecutive(500))
-			training();
-		execute_commands();
+		speaker_play_score2(score);
+		sleep_ticks(2000);
 	}
 
 	return 0;
