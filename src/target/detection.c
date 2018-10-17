@@ -9,6 +9,7 @@
 
 static volatile uint16_t sensors_off[NUM_SENSOR], sensors_on[NUM_SENSOR];
 static volatile float distance[NUM_SENSOR];
+static volatile float estimated_distance[NUM_SENSOR][NUM_ESTIMATIONS];
 static volatile float calibration_factor[NUM_SENSOR];
 const float sensors_calibration_a[NUM_SENSOR] = {
     SENSOR_SIDE_LEFT_A, SENSOR_SIDE_RIGHT_A, SENSOR_FRONT_LEFT_A,
@@ -296,6 +297,27 @@ static float raw_log(uint16_t on, uint16_t off)
 	return log_conversion[diff];
 }
 
+static void update_estimated_distances(uint8_t sensor, float new_distance)
+{
+	float travelled_distance;
+	static int current_estimation = 0;
+
+	if (sensor == SENSOR_FRONT_LEFT_ID)
+		travelled_distance = get_encoder_left_speed();
+	else if (sensor == SENSOR_FRONT_RIGHT_ID)
+		travelled_distance = get_encoder_right_speed();
+	travelled_distance /= SYSTICK_FREQUENCY_HZ;
+
+	for (int i = 0; i < NUM_ESTIMATIONS; i++)
+		estimated_distance[sensor][i] -= travelled_distance;
+
+	estimated_distance[sensor][current_estimation] = new_distance;
+
+	current_estimation++;
+	if (current_estimation == NUM_ESTIMATIONS)
+		current_estimation = 0;
+}
+
 /**
  * @brief Calculate and update the distance from each sensor.
  *
@@ -311,7 +333,33 @@ void update_distance_readings(void)
 			       sensors_calibration_b[i]);
 		if ((i == SENSOR_SIDE_LEFT_ID) || (i == SENSOR_SIDE_RIGHT_ID))
 			distance[i] -= calibration_factor[i];
+		else
+			update_estimated_distances(i, distance[i]);
 	}
+}
+
+static float get_best_distance_estimation(uint8_t sensor)
+{
+	float sum;
+	float max;
+	float min;
+	float estimation_i;
+
+	max = estimated_distance[sensor][0];
+	min = max;
+	sum = max;
+	for (int i = 1; i < NUM_ESTIMATIONS; i++) {
+		estimation_i = estimated_distance[sensor][i];
+		sum += estimation_i;
+		if (estimation_i < min)
+			min = estimation_i;
+		if (estimation_i > max)
+			max = estimation_i;
+	}
+	sum -= max;
+	sum -= min;
+	sum /= (NUM_ESTIMATIONS - 2);
+	return sum;
 }
 
 /**
@@ -319,7 +367,7 @@ void update_distance_readings(void)
  */
 float get_front_left_distance(void)
 {
-	return distance[SENSOR_FRONT_LEFT_ID];
+	return get_best_distance_estimation(SENSOR_FRONT_LEFT_ID);
 }
 
 /**
@@ -327,7 +375,7 @@ float get_front_left_distance(void)
  */
 float get_front_right_distance(void)
 {
-	return distance[SENSOR_FRONT_RIGHT_ID];
+	return get_best_distance_estimation(SENSOR_FRONT_RIGHT_ID);
 }
 
 /**
@@ -380,7 +428,7 @@ float get_side_sensors_error(void)
  */
 float get_front_sensors_error(void)
 {
-	return distance[SENSOR_FRONT_LEFT_ID] - distance[SENSOR_FRONT_RIGHT_ID];
+	return get_front_left_distance() - get_front_right_distance();
 }
 
 /**
@@ -388,8 +436,8 @@ float get_front_sensors_error(void)
  */
 float get_front_wall_distance(void)
 {
-	return (distance[SENSOR_FRONT_LEFT_ID] +
-		distance[SENSOR_FRONT_RIGHT_ID]) /
+	return (get_front_left_distance() +
+		get_front_right_distance()) /
 	       2.;
 }
 
@@ -416,8 +464,8 @@ bool right_wall_detection(void)
  */
 bool front_wall_detection(void)
 {
-	return ((distance[SENSOR_FRONT_LEFT_ID] < FRONT_WALL_DETECTION) &&
-		(distance[SENSOR_FRONT_RIGHT_ID] < FRONT_WALL_DETECTION))
+	return ((get_front_left_distance() < FRONT_WALL_DETECTION) &&
+		(get_front_right_distance() < FRONT_WALL_DETECTION))
 		   ? true
 		   : false;
 }

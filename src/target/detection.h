@@ -10,6 +10,7 @@
 
 #include "clock.h"
 #include "config.h"
+#include "encoder.h"
 #include "search.h"
 #include "setup.h"
 
@@ -19,6 +20,7 @@
 #define SENSOR_FRONT_LEFT_ID 2
 #define SENSOR_FRONT_RIGHT_ID 3
 #define NUM_SENSOR 4
+#define NUM_ESTIMATIONS 5
 
 void get_sensors_raw(uint16_t *off, uint16_t *on);
 void update_distance_readings(void);
