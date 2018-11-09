@@ -347,7 +347,7 @@ void motor_control(void)
 		side_sensors_feedback = 0;
 	}
 
-	if (front_sensors_control_enabled) {
+	if (front_sensors_control_enabled && activate_front_sensors_control()) {
 		front_sensors_feedback = get_front_sensors_error();
 		front_sensors_integral += front_sensors_feedback;
 

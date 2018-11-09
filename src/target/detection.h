@@ -32,6 +32,7 @@ float get_front_wall_distance(void);
 bool front_wall_detection(void);
 bool right_wall_detection(void);
 bool left_wall_detection(void);
+bool activate_front_sensors_control(void);
 struct walls_around read_walls(void);
 void side_sensors_calibration(void);
 

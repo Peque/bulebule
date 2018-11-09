@@ -422,6 +422,21 @@ bool front_wall_detection(void)
 		   : false;
 }
 
+bool activate_front_sensors_control(void)
+{
+	if ((distance[SENSOR_FRONT_LEFT_ID] > 0.17) &&
+	    (distance[SENSOR_FRONT_LEFT_ID] < 0.19) &&
+	    (distance[SENSOR_FRONT_RIGHT_ID] > 0.17) &&
+	    (distance[SENSOR_FRONT_RIGHT_ID] < 0.19))
+		return true;
+	if ((distance[SENSOR_FRONT_LEFT_ID] > 0.08) &&
+	    (distance[SENSOR_FRONT_LEFT_ID] < 0.10) &&
+	    (distance[SENSOR_FRONT_RIGHT_ID] > 0.08) &&
+	    (distance[SENSOR_FRONT_RIGHT_ID] < 0.10))
+		return true;
+	return false;
+}
+
 /**
  * @brief Return left, front and right walls detection readings.
  */
