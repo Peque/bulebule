@@ -25,6 +25,15 @@ How can I build it?
    configuration.rst
    utils.rst
 
+
+Contributors
+------------
+
+.. ghcontributors::
+   :owner: Bulebots
+   :repository: bulebule
+
+
 Sponsors
 --------
 

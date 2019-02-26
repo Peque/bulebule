@@ -33,6 +33,7 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.coverage',
     'sphinx.ext.ifconfig',
+    'sphinxcontrib.ghcontributors',
     'sphinxembeddedvideos.peertube',
     'sphinxemoji.sphinxemoji',
 ]
