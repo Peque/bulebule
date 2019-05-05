@@ -3,6 +3,32 @@
 static volatile uint32_t saturated_left;
 static volatile uint32_t saturated_right;
 
+bool power_is_saturated(float power)
+{
+	if (power > MAX_PWM_PERIOD)
+		return true;
+	if (power < -MAX_PWM_PERIOD)
+		return true;
+	return false;
+}
+
+float power_limit(float power)
+{
+	if (power > MAX_PWM_PERIOD)
+		return (float)MAX_PWM_PERIOD;
+	// TODO: negative?
+	return power;
+}
+
+int32_t power_pwm_saturation(int32_t pwm_left, int32_t pwm_right)
+{
+	int32_t high = fmax(pwm_left, pwm_right);
+	if (high > MAX_PWM_PERIOD)
+		return high - MAX_PWM_PERIOD;
+	// TODO: negative?
+	return 0.;
+}
+
 /**
  * @brief Set left motor power.
  *
@@ -100,7 +126,7 @@ void drive_off(void)
 /**
  * @brief Return the maximum consecutive saturated PWM values.
  */
-uint32_t pwm_saturation(void)
+uint32_t pwm_is_saturated(void)
 {
 	if (saturated_right > saturated_left)
 		return saturated_right;
@@ -110,7 +136,7 @@ uint32_t pwm_saturation(void)
 /**
  * @brief Reset the PWM saturation counters.
  */
-void reset_pwm_saturation(void)
+void reset_pwm_is_saturated(void)
 {
 	saturated_left = 0;
 	saturated_right = 0;
