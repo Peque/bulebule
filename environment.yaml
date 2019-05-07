@@ -27,6 +27,7 @@ dependencies:
     - pyserial
     - pyyaml
     - pyzmq
+    - scikit-learn
     - scipy
     # Test
     - pytest
