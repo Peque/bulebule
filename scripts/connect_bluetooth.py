@@ -206,6 +206,8 @@ class Bulebule(cmd.Cmd):
         'linear_speed_profile',
         'static_turn_right_profile',
         'front_sensors_calibration',
+        'motors_speed_calibration ',
+        'motors_force_calibration ',
     ]
     SET_SUBCOMMANDS = [
         'micrometers_per_count ',
@@ -291,10 +293,10 @@ class Bulebule(cmd.Cmd):
         else:
             print('Please, specify what to plot!')
 
-    def do_run(self, extra):
+    def do_run(self, line):
         """Run different procedures on the mouse."""
-        if extra in self.RUN_SUBCOMMANDS:
-            self.proxy.send_bt('run %s\0' % extra)
+        if any(line.startswith(x) for x in self.RUN_SUBCOMMANDS):
+            self.proxy.send_bt('run %s\0' % line)
         else:
             print('Please, specify what to run!')
 
