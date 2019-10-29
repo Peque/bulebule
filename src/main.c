@@ -103,7 +103,9 @@ static void movement_phase(bool do_run)
 	if (!do_run) {
 		explore(force);
 	} else {
+                LOG_ERROR("Going to run!");
 		run(force);
+                LOG_ERROR("Going back!");
 		run_back(force);
 	}
 	after_moving();

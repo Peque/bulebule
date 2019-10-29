@@ -430,7 +430,7 @@ static void setup_adc1(void)
 	adc_set_single_conversion_mode(ADC1);
 	adc_enable_external_trigger_injected(ADC1, ADC_CR2_JEXTSEL_JSWSTART);
 	adc_set_right_aligned(ADC1);
-	adc_set_sample_time_on_all_channels(ADC1, ADC_SMPR_SMP_13DOT5CYC);
+	adc_set_sample_time_on_all_channels(ADC1, ADC_SMPR_SMP_28DOT5CYC);
 	adc_set_injected_sequence(
 	    ADC1, sizeof(channel_sequence) / sizeof(channel_sequence[0]),
 	    channel_sequence);
@@ -496,7 +496,7 @@ void setup_emitters(void)
 	timer_set_mode(TIM1, TIM_CR1_CKD_CK_INT, TIM_CR1_CMS_EDGE,
 		       TIM_CR1_DIR_UP);
 	timer_set_clock_division(TIM1, 0x00);
-	timer_set_prescaler(TIM1, (rcc_apb2_frequency / 160000 - 1));
+	timer_set_prescaler(TIM1, (rcc_apb2_frequency / 80000 - 1));
 	timer_set_period(TIM1, 10 - 1);
 	timer_enable_counter(TIM1);
 	timer_enable_irq(TIM1, TIM_DIER_UIE);

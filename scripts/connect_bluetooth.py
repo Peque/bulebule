@@ -208,6 +208,7 @@ class Bulebule(cmd.Cmd):
         'front_sensors_calibration',
         'motors_speed_calibration ',
         'motors_force_calibration ',
+        'motors_angular_calibration ',
     ]
     SET_SUBCOMMANDS = [
         'micrometers_per_count ',

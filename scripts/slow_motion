@@ -1,0 +1,1 @@
+ffmpeg -i TODO:input.mp4 -vf "setpts=8*PTS" TODO:output.mp4
