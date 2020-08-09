@@ -18,8 +18,6 @@ dependencies:
     - numpy
     - pandas
     #- pybluez
-    - pyqt5
-    - pyqtgraph
     - pyserial
     - pyyaml
     - pyzmq
